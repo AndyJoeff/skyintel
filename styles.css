@@ -295,7 +295,8 @@ button {
     }
 
     .hero-content {
-        margin-bottom: 3rem;
+        /*margin-bottom: 3rem;*/
+        flex: 0;
     }
 
     .hero-cta {
