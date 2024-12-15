@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aircraft Safety Details</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Open+Sans:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="mockData.js"></script>
+    <script src="details.js"></script>
+    <style>
+      /* Details Page Specific Styles */
+
+      /* Container Layout */
+      #details-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        font-family: "Inter", sans-serif;
+        margin-top: 80px;
+      }
+
+      /* Aircraft Header Section */
+      .aircraft-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 3rem;
+        padding: 2rem;
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .aircraft-image {
+        height: auto;
+        /*position: relative;
+        height: 400px;
+        overflow: hidden;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);*/
+      }
+
+      .aircraft-image img {
+        /*  width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;*/
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .aircraft-image:hover img {
+        transform: scale(1.05);
+      }
+
+      .aircraft-details {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .aircraft-top-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .aircraft-title h1 {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+      }
+
+      /* Safety Score Badge */
+      .safety-score-check {
+        font-size: 2rem;
+        font-weight: bold;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .safety-score.good {
+        background-color: #ffd3b6;
+        color: #7d4e1d;
+      }
+      span.safety-label {
+        font-size: 0.875rem;
+        font-weight: normal;
+        margin-top: 0.25rem;
+      }
+      /* Details Grid Layout */
+      .details-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        margin-bottom: 3rem;
+      }
+
+      /* Card Styles */
+      .specifications-card,
+      .safety-features-card,
+      .maintenance-card,
+      .charts-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.2s ease;
+      }
+
+      .specifications-card:hover,
+      .safety-features-card:hover,
+      .maintenance-card:hover,
+      .charts-card:hover {
+        transform: translateY(-5px);
+      }
+
+      /* Section Headers */
+      section h2 {
+        color: #2c3e50;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #e9ecef;
+      }
+
+      /* Specifications Grid */
+      .specs-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+
+      .spec-item {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .spec-label {
+        font-size: 0.9rem;
+        color: #6c757d;
+        text-transform: capitalize;
+      }
+
+      .spec-value {
+        font-size: 1.1rem;
+        color: #2c3e50;
+        font-weight: 500;
+      }
+
+      .spec-certifications {
+        grid-column: 1 / -1;
+      }
+
+      /* Safety Features */
+      .features-list {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .feature-item {
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        transition: background-color 0.2s ease;
+      }
+
+      .feature-item:hover {
+        background: #e9ecef;
+      }
+
+      .feature-item h3 {
+        color: #2c3e50;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .feature-item p {
+        color: #6c757d;
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      /* Maintenance Section */
+      .maintenance-details {
+        display: grid;
+        gap: 2rem;
+      }
+
+      .maintenance-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+
+      .required-inspections {
+        display: none;
+      }
+
+      .stat-item {
+        text-align: center;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+      }
+
+      .quick-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 1.5rem;
+        /* margin-top: 2rem; */
+      }
+
+      .key-stat {
+        background: white;
+        padding: 0.8rem 1.25rem;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+
+      .stat-label {
+        display: block;
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-value {
+        display: block;
+        font-size: 1.2rem;
+        color: #2c3e50;
+        font-weight: 600;
+      }
+
+      /* Maintenance Incidents */
+      .maintenance-incidents ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .maintenance-incidents li {
+        display: grid;
+        grid-template-columns: auto auto 1fr;
+        gap: 1rem;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .incident-date {
+        color: #6c757d;
+        font-size: 0.9rem;
+      }
+
+      .incident-type {
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .incident-type.minor {
+        background: #e9ecef;
+        color: #495057;
+      }
+
+      .incident-type.regular {
+        background: #cce5ff;
+        color: #004085;
+      }
+      .spec-item:last-child {
+        grid-column: 1 / -1;
+      }
+      /* Charts Section */
+      .charts-container {
+        display: grid;
+        gap: 2rem;
+      }
+
+      .chart {
+        background: white;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      /* Coming Soon Notice */
+      .coming-soon-notice {
+        text-align: center;
+        padding: 2rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        margin: 2rem 0;
+        color: #6c757d;
+        font-style: italic;
+      }
+
+      /* Action Buttons */
+      .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+
+      .back-button,
+      .print-button {
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        cursor: pointer;
+      }
+
+      .back-button {
+        background: #6c757d;
+        color: white;
+        border: none;
+      }
+
+      .print-button {
+        background: #2196f3;
+        color: white;
+        border: none;
+      }
+
+      .back-button:hover,
+      .print-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Error Container */
+      .error-container {
+        text-align: center;
+        padding: 4rem 2rem;
+      }
+
+      .error-container h2 {
+        color: #dc3545;
+        margin-bottom: 1rem;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 1024px) {
+        .details-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .aircraft-header {
+          grid-template-columns: 1fr;
+        }
+
+        .maintenance-stats {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .specs-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .aircraft-image {
+          height: 300px;
+        }
+
+        .aircraft-title h1 {
+          font-size: 2rem;
+        }
+      }
+
+      /* Print Styles */
+      @media print {
+        .action-buttons,
+        .coming-soon-notice {
+          display: none;
+        }
+
+        body {
+          background: white;
+        }
+
+        #details-container {
+          margin: 0;
+          padding: 0;
+        }
+
+        .aircraft-header,
+        .specifications-card,
+        .safety-features-card,
+        .maintenance-card,
+        .charts-card {
+          box-shadow: none;
+          break-inside: avoid;
+        }
+      }
+
+      .maintenance-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .maintenance-header {
+        margin-bottom: 2rem;
+        /* text-align: center; */
+      }
+
+      .maintenance-header h3 {
+        /* color: #1a237e; */
+        font-size: 1.5rem;
+        /* margin-bottom: 0.5rem; */
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 0.5rem;
+      }
+
+      .maintenance-header .subtitle {
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .check-timeline {
+        position: relative;
+        padding-left: 3rem;
+      }
+
+      .check-timeline:before {
+        content: "";
+        position: absolute;
+        left: 1.5rem;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #e0e0e0;
+        transform: translateX(-50%);
+      }
+
+      .check-item {
+        position: relative;
+        padding-bottom: 2rem;
+      }
+
+      .check-badge {
+        position: absolute;
+        left: -1.5rem;
+        width: 30px;
+        height: 30px;
+        background: #1a237e;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+        transform: translateX(-50%);
+        z-index: 1;
+      }
+
+      .check-details {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1.5rem;
+      }
+
+      .check-details h4 {
+        /* color: #1a237e; */
+        margin-bottom: 1rem;
+        font-size: 18px;
+        text-transform: uppercase;
+      }
+
+      .check-stats {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .stat {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      /*.stat i {
+        color: #1a237e;
+      }*/
+
+      .check-details p {
+        color: #444;
+        font-size: 0.95rem;
+        line-height: 1.4;
+      }
+
+      span.check-icon {
+        width: 30px;
+        height: 30px;
+        padding: 5px;
+        border-radius: 50%;
+      }
+
+      .certification-item {
+        background: #f8f9fa;
+        border-radius: 50px;
+        padding: 2px 15px;
+        font-size: 1.1rem;
+        color: #2c3e50;
+        font-weight: 500;
+      }
+
+      .certification-item:hover {
+        background: #e9ecef;
+      }
+
+      .certification-list {
+        display: flex;
+        gap: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="header">
+      <nav class="nav-container">
+        <div class="logo">
+          <a href="index.html"
+            ><img
+              src="images/SkyIntel-logo.png"
+              alt="Aircraft Safety Analyzer Logo"
+              class="logo-img"
+          /></a>
+        </div>
+        <button class="nav-toggle" aria-label="toggle navigation">
+          <span class="hamburger"></span>
+        </button>
+        <ul class="nav-menu">
+          <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">How It Works</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">Safety Database</a>
+          </li>
+          <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+        </ul>
+        <div class="nav-cta">
+          <a href="#" class="btn btn-login">Log In</a>
+          <a href="#" class="btn btn-signup">Sign Up</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div id="details-container"></div>
+    </main>
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-grid">
+          <!-- Company Info -->
+          <div class="footer-section">
+            <div class="footer-logo">
+              <img
+                src="images/SkyIntel-logo.png"
+                style="background: white"
+                class="logo-img"
+                alt="Aircraft Safety Analyzer Logo"
+              />
+            </div>
+            <p class="company-description">
+              Leading the aviation industry in safety analysis and risk
+              assessment through advanced technology and comprehensive data
+              analytics.
+            </p>
+            <div class="social-links">
+              <a href="#" aria-label="LinkedIn"
+                ><i class="fab fa-linkedin"></i
+              ></a>
+              <a href="#" aria-label="Twitter"
+                ><i class="fab fa-twitter"></i
+              ></a>
+              <a href="#" aria-label="Facebook"
+                ><i class="fab fa-facebook"></i
+              ></a>
+              <a href="#" aria-label="Instagram"
+                ><i class="fab fa-instagram"></i
+              ></a>
+            </div>
+          </div>
+
+          <!-- Quick Links -->
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul class="footer-links">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Safety Database</a></li>
+              <li><a href="#">How It Works</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+
+          <!-- Resources -->
+          <div class="footer-section">
+            <h3>Resources</h3>
+            <ul class="footer-links">
+              <li><a href="#">Safety Reports</a></li>
+              <li><a href="#">Aviation News</a></li>
+              <li><a href="#">Documentation</a></li>
+              <li><a href="#">API Access</a></li>
+              <li><a href="#">Support</a></li>
+            </ul>
+          </div>
+
+          <!-- Newsletter -->
+          <div class="footer-section">
+            <h3>Stay Updated</h3>
+            <p>
+              Subscribe to our newsletter for the latest aviation safety
+              updates.
+            </p>
+            <form class="newsletter-form">
+              <input type="email" placeholder="Enter your email" required />
+              <button type="submit">Subscribe</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Bottom Footer -->
+        <div class="footer-bottom">
+          <div class="footer-bottom-content">
+            <p>&copy; 2024 Aircraft Safety Analyzer. All rights reserved.</p>
+            <div class="footer-bottom-links">
+              <a href="#">Privacy Policy</a>
+              <a href="#">Terms of Service</a>
+              <a href="#">Cookie Policy</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
