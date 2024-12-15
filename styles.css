@@ -292,11 +292,12 @@ button {
         flex-direction: column;
         text-align: center;
         padding-top: 6rem;
+        min-height: auto;
     }
 
     .hero-content {
-        /*margin-bottom: 3rem;*/
-        flex: 0;
+        margin-bottom: 3rem;
+    
     }
 
     .hero-cta {
