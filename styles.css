@@ -292,6 +292,7 @@ button {
         flex-direction: column;
         text-align: center;
         padding-top: 6rem;
+        min-height: auto;
     }
 
     .hero-content {
