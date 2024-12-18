@@ -83,14 +83,28 @@ const mockDatabase = {
       totalFlights: 500000, // Cumulative flights across all units of this model globally
       incidentRate: 0.001, // Global incident rate for this aircraft model
       lastIncidentDate: "2019-03-10", // Date of last significant incident for this model type
-      images: {
-        primary: "path/to/737max-main.jpg", // Standard manufacturer promotional image
-        gallery: [
-          "path/to/737max-1.jpg", // Technical diagram
-          "path/to/737max-2.jpg", // Safety feature highlights
-          "path/to/737max-3.jpg", // Interior configuration
-        ],
-      },
+      images: [
+        {
+          url: "boeing-737-max-detail-1.jpg",
+          caption: "Front View",
+          type: "exterior"
+        },
+        {
+          url: "boeing-737-max.jpg",
+          caption: "Side Profile",
+          type: "exterior"
+        },
+        {
+          url: "boeing-737-max-detail-2.jpg",
+          caption: "Cockpit View",
+          type: "interior"
+        },
+        {
+          url: "boeing-737-max-detail-3.jpg",
+          caption: "Cabin Layout",
+          type: "interior"
+        }
+      ],
       specifications: {
         // Manufacturer specifications - same for all aircraft of this model
         length: "39.52 m",
