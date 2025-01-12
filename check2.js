@@ -1,3 +1,43 @@
+//Progress bar
+const progressBar = {
+    element: null,
+
+    initialize() {
+        this.element = document.getElementById('progress-bar');
+    },
+
+    start() {
+        if (!this.element) this.initialize();
+        this.element.style.width = '0%';
+        this.element.style.display = 'block';
+
+        // Move to 30% quickly
+        setTimeout(() => {
+            this.element.style.width = '30%';
+        }, 50);
+
+        // Then to 70%
+        setTimeout(() => {
+            this.element.style.width = '70%';
+        }, 300);
+    },
+
+    finish() {
+        if (!this.element) this.initialize();
+        this.element.style.width = '100%';
+
+        // Reset after animation
+        setTimeout(() => {
+            this.element.style.width = '0%';
+        }, 500);
+    }
+};
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+    progressBar.initialize();
+});
+
 const clearSearchBtn = document.getElementById('clear-search');
 const RESULTS_PER_PAGE = 6; // Number of results per page
 let currentPage = 1;
@@ -142,7 +182,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // For filter change events
     applyFiltersButton.addEventListener('click', performSearch);
 
-    resetFiltersButton.addEventListener('click', resetFilters);
+    resetFiltersButton.addEventListener('click', () => {
+        resetFilters().catch(console.error);
+    });
 
 
     // For search button click (keep as is)
@@ -151,7 +193,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Display featured items on page load
     displayResults(getRandomFeaturedItems(3), true);
 
-    function performSearch(triggeredByFilter = false) {
+    async function performSearch(triggeredByFilter = false) {
+
+
         // First, check if search input is empty
         const searchTerm = searchInput.value.trim().toLowerCase();
 
@@ -181,65 +225,103 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
 
-        if (resultsHeader) {
-            resultsHeader.style.display = 'none';
-        }
+        // Show both progress bar and loading spinner for search
+        progressBar.start();
+        const loadingSpinner = document.getElementById('loading-spinner');
+        loadingSpinner.style.display = 'flex';
 
-        // hide search suggestions when search is performed
-        searchSuggestions.style.display = 'none';
-        // Reset current page to 1 at the start of each new search
-        currentPage = 1;  // Add this line
+        try {
+            if (resultsHeader) {
+                resultsHeader.style.display = 'none';
+            }
+
+            // hide search suggestions when search is performed
+            searchSuggestions.style.display = 'none';
+            currentPage = 1;
+
+            const aircraftType = aircraftTypeSelect.value.toLowerCase();
+            const manufacturer = manufacturerSelect.value.toLowerCase();
+            const yearMin = parseInt(yearMinSlider.value);
+            const yearMax = parseInt(yearMaxSlider.value);
+            const minSafetyScore = parseInt(safetyScoreSlider.value);
+
+            // Add a small delay to make the progress visible
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            const aircraftResults = mockDatabase.aircraft.filter(aircraft => {
+                // If triggered by filter and no search term, skip search term matching
+                const matchesSearch = !searchTerm ||
+                    aircraft.model.toLowerCase().includes(searchTerm) ||
+                    aircraft.manufacturer.toLowerCase().includes(searchTerm);
+
+                const matchesType = aircraftType === '' ||
+                    aircraft.type.toLowerCase() === aircraftType;
+
+                const matchesManufacturer = manufacturer === '' ||
+                    aircraft.manufacturer.toLowerCase() === manufacturer;
+
+                const matchesYear = aircraft.year >= yearMin && aircraft.year <= yearMax;
+
+                const matchesSafetyScore = aircraft.safetyScore >= minSafetyScore;
 
 
+                // For debugging
+                console.log({
+                    aircraft: aircraft.model,
+                    searchTerm,
+                    aircraftType,
+                    manufacturer,
+                    yearMin,
+                    yearMax,
+                    minSafetyScore,
+                    matchesSearch,
+                    matchesType,
+                    matchesManufacturer,
+                    matchesYear,
+                    matchesSafetyScore
+                });
 
-        const aircraftType = aircraftTypeSelect.value.toLowerCase(); // Convert to lowercase
-        const manufacturer = manufacturerSelect.value.toLowerCase(); // Convert to lowercase
-        const yearMin = parseInt(yearMinSlider.value);
-        const yearMax = parseInt(yearMaxSlider.value);
-        const minSafetyScore = parseInt(safetyScoreSlider.value);
-
-        const aircraftResults = mockDatabase.aircraft.filter(aircraft => {
-            // If triggered by filter and no search term, skip search term matching
-            const matchesSearch = !searchTerm ||
-                aircraft.model.toLowerCase().includes(searchTerm) ||
-                aircraft.manufacturer.toLowerCase().includes(searchTerm);
-
-            const matchesType = aircraftType === '' ||
-                aircraft.type.toLowerCase() === aircraftType;
-
-            const matchesManufacturer = manufacturer === '' ||
-                aircraft.manufacturer.toLowerCase() === manufacturer;
-
-            const matchesYear = aircraft.year >= yearMin && aircraft.year <= yearMax;
-
-            const matchesSafetyScore = aircraft.safetyScore >= minSafetyScore;
-
-
-            // For debugging
-            console.log({
-                aircraft: aircraft.model,
-                searchTerm,
-                aircraftType,
-                manufacturer,
-                yearMin,
-                yearMax,
-                minSafetyScore,
-                matchesSearch,
-                matchesType,
-                matchesManufacturer,
-                matchesYear,
-                matchesSafetyScore
+                return matchesSearch &&
+                    matchesType &&
+                    matchesManufacturer &&
+                    matchesYear &&
+                    matchesSafetyScore;
             });
 
-            return matchesSearch &&
-                matchesType &&
-                matchesManufacturer &&
-                matchesYear &&
-                matchesSafetyScore;
+            const sortedResults = aircraftResults.sort((a, b) => b.safetyScore - a.safetyScore);
+            displayResults(sortedResults, false);
+
+
+            // Preload images before displaying results
+            await preloadImages(sortedResults);
+
+            // Display results
+            await displayResults(sortedResults, false);
+
+        } catch (error) {
+            console.error('Error during search:', error);
+        } finally {
+            // Hide both progress bar and spinner
+            progressBar.finish();
+            loadingSpinner.style.display = 'none';
+        }
+    }
+
+    // Function to preload images
+    function preloadImages(results) {
+        const imagePromises = results.map(result => {
+            if (result.imageUrl) { // Assuming you have image URLs in your data
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = resolve;
+                    img.onerror = resolve; // Resolve anyway to prevent hanging
+                    img.src = result.imageUrl;
+                });
+            }
+            return Promise.resolve();
         });
 
-        const sortedResults = aircraftResults.sort((a, b) => b.safetyScore - a.safetyScore);
-        displayResults(sortedResults, false);
+        return Promise.all(imagePromises);
     }
 
     // Trigger search on Enter key press
@@ -251,30 +333,50 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
-    function resetFilters() {
-        currentPage = 1;
-        aircraftTypeSelect.value = '';
-        manufacturerSelect.value = '';
+    async function resetFilters() {
+        // Start progress bar
+        progressBar.start();
 
-        // Reset year sliders
-        yearMinSlider.value = yearMinSlider.min;
-        yearMaxSlider.value = yearMaxSlider.max;
-        yearMinValue.textContent = yearMinSlider.min;
-        yearMaxValue.textContent = yearMaxSlider.max;
-        yearTrack.style.backgroundColor = 'transparent';
-        yearTrack.style.left = "0%";
-        yearTrack.style.width = "100%";
+        try {
+            currentPage = 1;
+            aircraftTypeSelect.value = '';
+            manufacturerSelect.value = '';
 
-        // Reset safety score slider
-        safetyScoreSlider.value = safetyScoreSlider.min;
-        safetyScoreValue.textContent = safetyScoreSlider.min;
-        safetyScoreTrack.style.backgroundColor = 'transparent';
-        safetyScoreTrack.style.width = "0%";
-        safetyScoreSlider.style.setProperty('--thumb-color', '#ff4e50');
+            // Reset year sliders
+            yearMinSlider.value = yearMinSlider.min;
+            yearMaxSlider.value = yearMaxSlider.max;
+            yearMinValue.textContent = yearMinSlider.min;
+            yearMaxValue.textContent = yearMaxSlider.max;
+            yearTrack.style.backgroundColor = 'transparent';
+            yearTrack.style.left = "0%";
+            yearTrack.style.width = "100%";
 
-        /*performSearch();*/
-        displayResults(getRandomFeaturedItems(3), true);
-        resultsHeader.style.display = 'block';
+            // Reset safety score slider
+            safetyScoreSlider.value = safetyScoreSlider.min;
+            safetyScoreValue.textContent = safetyScoreSlider.min;
+            safetyScoreTrack.style.backgroundColor = 'transparent';
+            safetyScoreTrack.style.width = "0%";
+            safetyScoreSlider.style.setProperty('--thumb-color', '#ff4e50');
+
+            // Add a small delay to make the progress bar visible
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            // Get featured items
+            const featuredItems = getRandomFeaturedItems(3);
+
+            // Preload images before displaying
+            await preloadImages(featuredItems);
+
+            // Display results after preloading
+            await displayResults(featuredItems, true);
+            resultsHeader.style.display = 'block';
+
+        } catch (error) {
+            console.error('Error resetting filters:', error);
+        } finally {
+            // Complete the progress bar
+            progressBar.finish();
+        }
     }
 
     function displayResults(results, isFeatured = false) {
@@ -336,26 +438,26 @@ document.addEventListener('DOMContentLoaded', function () {
                  <div class="card-header">
                     <h3 class="aircraft-name">${result.model}</h3>
                     <div class="aircraft-meta">
-                    <span class="manufacturer"><i class="fas fa-industry"></i>${result.manufacturer} </span>
+                    <span class="manufacturer"><i class="fa-regular fa-industry"></i>${result.manufacturer} </span>
                      <span class="meta-separator">•</span>
-                    <span class="type"><i class="fas fa-plane"></i>${result.type}</span>
+                    <span class="type"><i class="fa-regular fa-plane"></i>${result.type}</span>
                      <span class="meta-separator">•</span>
-                    <span class="year"><i class="fas fa-calendar-alt"></i>${result.year} </span>
+                    <span class="year"><i class="fa-regular fa-calendar-days"></i>${result.year} </span>
                     </div>
                         </div>
             <div class="stats-grid">
                 <div class="stat-item">
-                <i class="fas fa-plane-departure"></i>
+                <i class="fa-regular fa-plane-departure"></i>
                     <span class="stat-label">Total Flights: </span>
                      <span class="stat-value">${result.totalFlights.toLocaleString()}</span>
                 </div>
                 <div class="stat-item">
-                <i class="fas fa-exclamation-triangle"></i>
+                <i class="fa-regular fa-triangle-exclamation"></i>
                     <span class="stat-label">Incident Rate: </span>
                      <span class="stat-value">${(result.incidentRate * 100).toFixed(4)}%</span>
                 </div>
                 <div class="stat-item">
-                  <i class="fas fa-clock"></i>
+                  <i class="fa-regular fa-clock"></i>
                     <span class="stat-label">Last Incident</span>
                      <span class="stat-value">${result.lastIncidentDate}</span>
                 </div>
@@ -391,10 +493,9 @@ document.addEventListener('DOMContentLoaded', function () {
         prevButton.textContent = '←';
         prevButton.classList.add('pagination-btn');
         prevButton.disabled = currentPage === 1;
-        prevButton.addEventListener('click', () => {
+        prevButton.addEventListener('click', async () => {
             if (currentPage > 1) {
-                currentPage--;
-                displayResults(currentResults);
+                await handlePageChange(currentPage - 1);
             }
         });
         pagination.appendChild(prevButton);
@@ -407,9 +508,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (i === currentPage) {
                 pageButton.classList.add('active');
             }
-            pageButton.addEventListener('click', () => {
-                currentPage = i;
-                displayResults(currentResults);
+            pageButton.addEventListener('click', async () => {
+                await handlePageChange(i);
             });
             pagination.appendChild(pageButton);
         }
@@ -419,16 +519,46 @@ document.addEventListener('DOMContentLoaded', function () {
         nextButton.textContent = '→';
         nextButton.classList.add('pagination-btn');
         nextButton.disabled = currentPage === totalPages;
-        nextButton.addEventListener('click', () => {
+        nextButton.addEventListener('click', async () => {
             if (currentPage < totalPages) {
-                currentPage++;
-                displayResults(currentResults);
+                await handlePageChange(currentPage + 1);
             }
         });
         pagination.appendChild(nextButton);
 
         return pagination;
     }
+
+    async function handlePageChange(newPage) {
+        progressBar.start();
+
+        try {
+            // Add a small delay to make the progress bar visible
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            currentPage = newPage;
+            const start = (currentPage - 1) * RESULTS_PER_PAGE;
+            const end = start + RESULTS_PER_PAGE;
+            const paginatedResults = currentResults.slice(start, end);
+
+            // Preload images for the new page
+            await preloadImages(paginatedResults);
+            await displayResults(currentResults, false); // Keeping currentResults for pagination calculation
+            // Scroll to results with offset
+            const resultsContainer = document.querySelector('.search-results');
+            const headerHeight = document.querySelector('header').offsetHeight;
+            const scrollPosition = resultsContainer.offsetTop - headerHeight - 20; // 20px extra padding
+            window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
+
+        } catch (error) {
+            console.error('Error during pagination:', error);
+        } finally {
+            progressBar.finish();
+        }
+
+
+    }
+
 
     function getSafetyScoreColor(score) {
         if (score >= 90) return '#4CAF50';

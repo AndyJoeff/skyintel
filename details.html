@@ -14,7 +14,7 @@
     rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="mockData.js"></script>
-  <script src="details.js"></script>
+  <script src="details2.js"></script>
   <style>
     /* Details Page Specific Styles */
 
@@ -62,7 +62,7 @@
     /* Details Grid Layout */
     .details-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      /*grid-template-columns: repeat(2, 1fr);*/
       gap: 2rem;
       margin-bottom: 3rem;
     }
@@ -103,7 +103,7 @@
 
     .spec-item {
       display: flex;
-      flex-direction: column;
+      /* flex-direction: column;*/
     }
 
     .spec-label {
@@ -163,9 +163,9 @@
       gap: 1rem;
     }
 
-    .required-inspections {
+    /* .required-inspections {
       display: none;
-    }
+    }*/
 
     .stat-item {
       text-align: center;
@@ -230,7 +230,6 @@
       padding: 1rem;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     }
 
     /* Coming Soon Notice */
@@ -484,6 +483,7 @@
       gap: 2.5rem;
       padding: 2rem;
       margin-bottom: 3rem;
+      flex-wrap: wrap;
       background: #fff;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -499,7 +499,7 @@
       position: relative;
       overflow: hidden;
       border-radius: 8px;
-      aspect-ratio: 16/9;
+      /*aspect-ratio: 16/9;*/
     }
 
 
@@ -617,7 +617,7 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 3.3rem;
     }
 
     /* Top Header Section */
@@ -631,6 +631,12 @@
     .aircraft-title {
       flex: 1;
     }
+
+    span.arrow {
+      font-family: 'Roboto', "Inter", sans-serif;
+    }
+
+
 
     .aircraft-title h1 {
       font-size: 2.5rem;
@@ -682,10 +688,10 @@
     .quick-stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      padding: 1.3rem;
+      gap: 1rem;
+      padding: 1rem;
       background: var(--clr-light);
-      border-radius: 12px;
+      border-radius: 8px;
     }
 
     .key-stat {
@@ -703,7 +709,6 @@
       font-size: 1.5rem;
       font-weight: 700;
       color: var(--clr-primary);
-      margin-bottom: 0.3rem;
     }
 
     .stat-label {
@@ -738,14 +743,13 @@
         gap: 2rem;
       }
 
-      .chart-container {
+      /*.chart-container {
         height: 230px;
-      }
+      }*/
 
       canvas#safetyTrendChart,
       canvas#reliabilityChart {
-        width: 320px;
-
+        width: 288px;
       }
 
       #details-container {
@@ -753,7 +757,7 @@
       }
 
       .chart {
-        max-width: 336px;
+        max-width: 320px;
         text-align: center;
         margin: 0 auto;
       }
@@ -816,6 +820,517 @@
 
       .key-stat {
         padding: 0.75rem 1rem;
+      }
+    }
+
+    .specifications-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+      margin-bottom: 2rem;
+    }
+
+    .card-header h2 {
+      color: var(--clr-primary);
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .header-subtitle {
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+
+    .specs-content {
+      display: grid;
+      gap: 2rem;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .spec-group {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+
+    .spec-group h3 {
+      color: var(--clr-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .spec-items {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .spec-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .spec-icon {
+      font-size: 1.25rem;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .spec-details {
+      flex: 1;
+    }
+
+    .spec-label {
+      color: #6c757d;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .spec-value {
+      color: var(--clr-primary);
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .certifications-section {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+
+    .cert-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .cert-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #fff;
+      padding: 0.75rem 1rem;
+      border-radius: 25px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .cert-icon {
+      color: #28a745;
+      font-size: 1.1rem;
+    }
+
+    .cert-text {
+      font-weight: 500;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .specifications-card {
+        padding: 1rem;
+      }
+
+      .specs-grid {
+        gap: 1rem;
+      }
+
+      .spec-group {
+        padding: 1rem;
+      }
+
+      .cert-badges {
+        gap: 0.75rem;
+      }
+    }
+
+    .safety-features-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      margin-top: 2rem;
+    }
+
+    .safety-features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .safety-feature-item {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: transform 0.2s ease;
+    }
+
+    .safety-feature-item:hover {
+      transform: translateY(-2px);
+    }
+
+    .feature-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      background: #fff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .feature-header h3 {
+      color: var(--clr-primary);
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .feature-content {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .feature-description {
+      color: #4a5568;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .feature-certification {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background: #fff;
+      border-radius: 6px;
+      width: fit-content;
+    }
+
+    .cert-icon {
+      color: #28a745;
+    }
+
+    .cert-date {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .safety-features-card {
+        padding: 1rem;
+      }
+
+      .safety-features-grid {
+        gap: 1rem;
+      }
+
+      .safety-feature-item {
+        padding: 1rem;
+      }
+
+      .feature-header h3 {
+        font-size: 1rem;
+      }
+    }
+
+    .maintenance-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .maintenance-content {
+      display: grid;
+      gap: 2rem;
+    }
+
+    .maintenance-checks h3,
+    .required-inspections h3 {
+      color: var(--clr-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .checks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .check-item {
+      background: #f8f9fa;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .check-header {
+      background: var(--clr-primary);
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .check-type {
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+
+    .check-interval {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.25rem 0.75rem;
+      border-radius: 15px;
+      font-size: 0.9rem;
+    }
+
+    .check-details {
+      padding: 1.25rem;
+    }
+
+    .check-duration {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--clr-secondary);
+    }
+
+    .duration-icon {
+      font-size: 1.1rem;
+    }
+
+    .duration-text {
+      font-weight: 500;
+    }
+
+    .check-description {
+      color: #6c757d;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .inspection-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .inspection-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: #f8f9fa;
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+    }
+
+    .inspection-icon {
+      color: #28a745;
+      font-size: 1.1rem;
+    }
+
+    .inspection-text {
+      color: var(--clr-primary);
+      font-size: 0.95rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .maintenance-card {
+        padding: 1rem;
+      }
+
+      .checks-grid {
+        gap: 1rem;
+      }
+
+      .check-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+      }
+
+      .inspection-item {
+        padding: 0.75rem 1rem;
+      }
+    }
+
+    .charts-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .charts-card h2 {
+      color: var(--clr-primary);
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-container {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+
+    .chart-container h3 {
+      color: var(--clr-secondary);
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .metrics-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #eee;
+    }
+
+    .summary-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .summary-label {
+      font-size: 0.9rem;
+      color: #6c757d;
+      margin-bottom: 0.5rem;
+    }
+
+    .summary-value {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--clr-primary);
+    }
+
+    @media (max-width: 768px) {
+      .charts-card {
+        padding: 1rem;
+      }
+
+      .charts-grid {
+        gap: 1rem;
+      }
+
+      .chart-container {
+        padding: 1rem;
+      }
+    }
+
+    .aircraft-action-bar {
+      flex: 0 0 100%;
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      padding: 1rem;
+      background: var(--clr-light);
+      border-radius: 8px;
+    }
+
+    .action-button {
+      display: flex;
+      /*flex-direction: column;*/
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem;
+      background: white;
+      border: none;
+      border-radius: 8px;
+      color: var(--clr-primary);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .action-button i {
+      font-size: 1.5rem;
+      color: var(--clr-accent);
+    }
+
+    .action-button:hover {
+      background: var(--clr-primary);
+      color: white;
+    }
+
+    .action-button:hover i {
+      color: white;
+    }
+
+    .action-button.active {
+      color: var(--clr-primary);
+      background: rgba(0, 0, 0, 0.05);
+      /*background: var(--clr-accent);*/
+    }
+
+
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .aircraft-action-bar {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .aircraft-action-bar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .aircraft-action-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .action-button {
+        flex-direction: row;
+        justify-content: center;
+        padding: 0.75rem;
       }
     }
   </style>

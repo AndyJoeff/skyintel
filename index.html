@@ -5,28 +5,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advanced Aircraft Safety Analyzer</title>
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css">
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-duotone-thin.css">
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-duotone-solid.css">
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-duotone-regular.css">
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-duotone-light.css">
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-thin.css">
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-solid.css">
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-regular.css">
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/sharp-light.css">
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/duotone-thin.css">
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/duotone-regular.css">
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/duotone-light.css">
+
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png">
 
     <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
+
 
     <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Open+Sans:wght@300;400;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">-->
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css">
 
     <!-- Chart.js for data visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
 </head>
 
 <body>
+    <div class="progress-container">
+        <div id="progress-bar" class="progress-bar"></div>
+    </div>
+    <!-- Add this somewhere in your HTML -->
+    <div id="loading-spinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+        <p>Loading results...</p>
+    </div>
     <!-- Add this right after the opening <body> tag -->
     <div class="popup-overlay" id="demo-notice">
         <div class="popup-content">
@@ -66,6 +100,36 @@
             <h1 class="hero-title">Advanced Aircraft Safety Analysis</h1>
             <p class="hero-subtitle">Make informed decisions with real-time safety data from the world's most
                 comprehensive aviation database.</p>
+            <!--<div class="hero-feature">
+                <div class="safety-score-demo">
+                    <div class="score-circle">
+                        <svg viewBox="0 0 36 36" class="circular-chart">
+                            <path class="circle-bg" d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                            <path class="circle" stroke-dasharray="85, 100" d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                            <text x="18" y="20.35" class="percentage">85%</text>
+                        </svg>
+                    </div>
+                    <span class="score-label">Global Safety Score</span>
+                </div>
+                <div class="quick-stats">
+                    <div class="stat">
+                        <span class="stat-number">150K+</span>
+                        <span class="stat-label">Aircraft Analyzed</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">200+</span>
+                        <span class="stat-label">Airlines Covered</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">Real-time Updates</span>
+                    </div>
+                </div>
+            </div>-->
             <div class="hero-cta">
                 <a href="#aircraft-safety-analyzer" class="btn btn-primary">Start Your Analysis</a>
                 <a href="#how-it-works" class="btn btn-secondary">Learn How It Works</a>
@@ -79,7 +143,8 @@
     <section class="intro">
         <div class="container">
             <h2 class="intro-title">The Analysis Framework</h2>
-            <p class="intro-description">Our advanced tool combines cutting-edge technology with comprehensive aviation
+            <p class="intro-description">Our advanced tool combines cutting-edge technology with comprehensive
+                aviation
                 data to provide unparalleled insights into aircraft safety.</p>
 
             <div class="features">
@@ -95,7 +160,8 @@
                         </svg>
                     </div>
                     <h3 class="feature-title">Real-Time Data Analysis</h3>
-                    <p class="feature-description">Access up-to-the-minute safety data from global aviation sources,
+                    <p class="feature-description">Access up-to-the-minute safety data from global aviation
+                        sources,
                         processed and analyzed in real-time.</p>
                 </div>
 
@@ -108,7 +174,8 @@
                         </svg>
                     </div>
                     <h3 class="feature-title">Historical Trend Analysis</h3>
-                    <p class="feature-description">Dive deep into historical safety records to identify patterns and
+                    <p class="feature-description">Dive deep into historical safety records to identify patterns
+                        and
                         predict future trends with advanced AI algorithms.</p>
                 </div>
 
@@ -120,7 +187,8 @@
                         </svg>
                     </div>
                     <h3 class="feature-title">Customized Reporting</h3>
-                    <p class="feature-description">Generate tailored safety reports for specific aircraft models,
+                    <p class="feature-description">Generate tailored safety reports for specific aircraft
+                        models,
                         airlines, or routes to suit your unique needs.</p>
                 </div>
             </div>
@@ -142,7 +210,8 @@
                         </svg>
                     </div>
                     <h3 class="step-title">Input Aircraft Details</h3>
-                    <p class="step-description">Enter the aircraft model, airline, or registration number into our
+                    <p class="step-description">Enter the aircraft model, airline, or registration number into
+                        our
                         advanced search system.</p>
                 </div>
                 <div class="step">
@@ -153,7 +222,8 @@
                         </svg>
                     </div>
                     <h3 class="step-title">Access Safety Data</h3>
-                    <p class="step-description">Our system retrieves comprehensive safety data from our extensive global
+                    <p class="step-description">Our system retrieves comprehensive safety data from our
+                        extensive global
                         database.</p>
                 </div>
                 <div class="step">
@@ -164,7 +234,8 @@
                         </svg>
                     </div>
                     <h3 class="step-title">Analyze Results</h3>
-                    <p class="step-description">Review detailed safety analysis, including historical data, incident
+                    <p class="step-description">Review detailed safety analysis, including historical data,
+                        incident
                         reports, and safety ratings.</p>
                 </div>
                 <div class="step">
@@ -174,7 +245,8 @@
                         </svg>
                     </div>
                     <h3 class="step-title">Make Informed Decisions</h3>
-                    <p class="step-description">Use the insights provided to make data-driven decisions about aircraft
+                    <p class="step-description">Use the insights provided to make data-driven decisions about
+                        aircraft
                         safety and operations.</p>
                 </div>
             </div>
@@ -278,7 +350,8 @@
                             <div class="insight-content">
                                 <span class="insight-tag">Safety Trend</span>
                                 <h3>Commercial Aviation Safety Improvement</h3>
-                                <p>Global commercial aviation safety scores show a 15% improvement over the last 5
+                                <p>Global commercial aviation safety scores show a 15% improvement over the last
+                                    5
                                     years.</p>
                                 <div class="stat-highlight">
                                     <span class="stat-number">15%</span>
@@ -294,7 +367,8 @@
                             <div class="insight-content">
                                 <span class="insight-tag">Analysis</span>
                                 <h3>Top Performing Aircraft Models</h3>
-                                <p>Analysis of the safest commercial aircraft models based on operational data.</p>
+                                <p>Analysis of the safest commercial aircraft models based on operational data.
+                                </p>
                                 <div class="stat-highlight">
                                     <span class="stat-number">98.5%</span>
                                     <span class="stat-label">Average Safety Score</span>
@@ -309,7 +383,8 @@
                             <div class="insight-content">
                                 <span class="insight-tag">Report</span>
                                 <h3>Emerging Safety Technologies</h3>
-                                <p>New aviation safety technologies showing promising results in early adoption.</p>
+                                <p>New aviation safety technologies showing promising results in early adoption.
+                                </p>
                                 <div class="stat-highlight">
                                     <span class="stat-number">30%</span>
                                     <span class="stat-label">Risk Reduction</span>
@@ -324,7 +399,8 @@
                             <div class="insight-content">
                                 <span class="insight-tag">Research</span>
                                 <h3>Predictive Maintenance Analytics</h3>
-                                <p>Advanced analytics improving aircraft maintenance prediction accuracy and efficiency.
+                                <p>Advanced analytics improving aircraft maintenance prediction accuracy and
+                                    efficiency.
                                 </p>
                                 <div class="stat-highlight">
                                     <span class="stat-number">40%</span>
@@ -371,7 +447,8 @@
                             <div class="insight-content">
                                 <span class="insight-tag">Innovation</span>
                                 <h3>AI in Aircraft Safety Systems</h3>
-                                <p>Implementation of AI-powered safety systems showing promising early results.</p>
+                                <p>Implementation of AI-powered safety systems showing promising early results.
+                                </p>
                                 <div class="stat-highlight">
                                     <span class="stat-number">35%</span>
                                     <span class="stat-label">Error Reduction</span>
@@ -386,7 +463,8 @@
                             <div class="insight-content">
                                 <span class="insight-tag">Materials</span>
                                 <h3>Advanced Composite Materials</h3>
-                                <p>New aircraft materials improving structural integrity and reducing maintenance needs.
+                                <p>New aircraft materials improving structural integrity and reducing
+                                    maintenance needs.
                                 </p>
                                 <div class="stat-highlight">
                                     <span class="stat-number">20%</span>
@@ -402,7 +480,8 @@
                             <div class="insight-content">
                                 <span class="insight-tag">Future Tech</span>
                                 <h3>Electric Aircraft Safety Standards</h3>
-                                <p>Development of new safety protocols for emerging electric aircraft technology.</p>
+                                <p>Development of new safety protocols for emerging electric aircraft
+                                    technology.</p>
                                 <div class="stat-highlight">
                                     <span class="stat-number">100%</span>
                                     <span class="stat-label">Safety Compliance</span>
@@ -432,8 +511,10 @@
                         <svg class="quote-icon" viewBox="0 0 24 24">
                             <path d="M10 7L8 11H11V17H5V11L7 7H10ZM18 7L16 11H19V17H13V11L15 7H18Z"></path>
                         </svg>
-                        <p>This analyzer has revolutionized how we assess aircraft safety. The comprehensive data and
-                            intuitive interface make it an invaluable tool for our aviation safety protocols.</p>
+                        <p>This analyzer has revolutionized how we assess aircraft safety. The comprehensive
+                            data and
+                            intuitive interface make it an invaluable tool for our aviation safety protocols.
+                        </p>
                     </div>
                     <div class="testimonial-author">
                         <div class="testimonial-header">
@@ -457,7 +538,8 @@
                             <path d="M10 7L8 11H11V17H5V11L7 7H10ZM18 7L16 11H19V17H13V11L15 7H18Z"></path>
                         </svg>
                         <p>Having been in aviation safety for over two decades, I'm impressed by the depth and
-                            accuracy of this tool. It's become an indispensable resource for our research and analysis.
+                            accuracy of this tool. It's become an indispensable resource for our research and
+                            analysis.
                         </p>
                     </div>
                     <div class="testimonial-author">
@@ -481,7 +563,8 @@
                             <path d="M10 7L8 11H11V17H5V11L7 7H10ZM18 7L16 11H19V17H13V11L15 7H18Z"></path>
                         </svg>
                         <p>
-                            The level of detail in safety analysis this tool provides is unprecedented. It's transformed
+                            The level of detail in safety analysis this tool provides is unprecedented. It's
+                            transformed
                             how we conduct our certification processes and safety audits.
                         </p>
                     </div>
@@ -503,40 +586,42 @@
     </section>
     <section class="cta-section">
         <div class="container">
-            <div class="cta-grid">
-                <!-- Main CTA -->
+            <div class="cta-content">
                 <div class="cta-main">
-                    <h2>Ready to Elevate Your Safety Standards?</h2>
-                    <p>Make informed decisions with comprehensive aircraft safety analysis.</p>
-                    <button class="cta-button primary">Get Started Free</button>
+                    <h2>Ready to elevate your safety standards?</h2>
+                    <p>Join thousands of aviation professionals making data-driven safety decisions.</p>
+                    <button class="cta-button primary">Get Started for Free</button>
                 </div>
 
-                <!-- Premium Features -->
                 <div class="cta-premium">
-                    <h3>Unlock Premium Features</h3>
-                    <ul class="premium-features">
-                        <li>
-                            <span class="cta-feature-icon">📊</span>
-                            <span class="feature-text">Advanced Analytics Dashboard</span>
-                        </li>
-                        <li>
-                            <span class="cta-feature-icon">📈</span>
-                            <span class="feature-text">Historical Trend Analysis</span>
-                        </li>
-                        <li>
-                            <span class="cta-feature-icon">📱</span>
-                            <span class="feature-text">Mobile App Access</span>
-                        </li>
-                        <li>
-                            <span class="cta-feature-icon">📥</span>
-                            <span class="feature-text">Custom PDF Reports</span>
-                        </li>
-                    </ul>
-                    <button class="cta-button secondary">Upgrade to Premium</button>
+                    <div class="premium-card">
+                        <h3>Upgrade to Premium</h3>
+                        <ul class="premium-features">
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M20 6L9 17l-5-5" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                </svg>Advanced Analytics Dashboard
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M20 6L9 17l-5-5" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                </svg>
+                                Priority access to latest safety data
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M20 6L9 17l-5-5" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                </svg>Unlimited searches
+                            </li>
+                        </ul>
+                        <button class="cta-button secondary">Upgrade Now</button>
+                    </div>
                 </div>
             </div>
         </div>
-
     </section>
     <div class="separator"></div>
     <footer class="footer">
@@ -549,7 +634,8 @@
                             alt="Aircraft Safety Analyzer Logo">
                     </div>
                     <p class="company-description">
-                        Leading the aviation industry in safety analysis and risk assessment through advanced technology
+                        Leading the aviation industry in safety analysis and risk assessment through advanced
+                        technology
                         and comprehensive data analytics.
                     </p>
                     <div class="social-links">
