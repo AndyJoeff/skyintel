@@ -921,7 +921,7 @@ class AircraftComparison {
             <table>
                 <thead>
                     <tr>
-                        <th>Specification</th>
+                        <th class="DHT">Specification</th>
                         ${aircraftData.map(aircraft => `
                             <th>${aircraft.model}</th>
                         `).join('')}
@@ -1121,7 +1121,7 @@ class AircraftComparison {
                 <table>
                     <thead>
                         <tr>
-                            <th>Safety Feature</th>
+                            <th class="DHT">Safety Feature</th>
                             ${aircraftData.map(aircraft => `
                                 <th>${aircraft.model}</th>
                             `).join('')}
