@@ -6,11 +6,15 @@
     color: #2c3e50;
 }
 
+.header {
+    position: static;
+}
+
 .comp-main {
     max-width: 1440px;
     margin: 0 auto;
     padding: 2rem;
-    margin-top: 80px;
+    /*margin-top: 80px;*/
 }
 
 /* Control Panel */
@@ -23,6 +27,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
+    gap: 1.5em;
 }
 
 .comp-selected {
@@ -102,7 +107,7 @@
     background: #fff;
     border-radius: 8px;
     margin-bottom: 2rem;
-    /*position: sticky;*/
+    position: sticky;
     top: 0;
     z-index: 10;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -116,7 +121,7 @@
 }
 
 .comp-nav-item {
-    padding: 1rem 1.5rem;
+    /* padding: 1rem 1.5rem;*/
     position: relative;
 }
 
@@ -128,6 +133,32 @@
     width: 100%;
     height: 2px;
     background: #4299e1;
+}
+
+.comp-nav-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+/* Remove the original active indicator */
+.comp-nav-item.active::after {
+    content: none;
+}
+
+/* Add sliding indicator */
+.comp-nav-list::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background: #4299e1;
+    transition: all 0.3s ease;
+    left: 0;
+    width: var(--indicator-width, 0);
+    transform: translateX(var(--indicator-left, 0));
 }
 
 .comp-nav-item a {
@@ -144,7 +175,9 @@
     margin-bottom: 2rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     min-height: 400px;
+    scroll-margin-top: 80px;
 }
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -166,6 +199,7 @@
     .comp-nav-list {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
     }
 }
 
@@ -271,7 +305,10 @@
         width: 95%;
         max-height: 90vh;
     }
+
 }
+
+
 
 /* Control Panel Buttons */
 .comp-options {
@@ -983,6 +1020,7 @@
     border: 1px solid #e2e8f0;
     border-radius: 8px;
     overflow: hidden;
+    width: 100%;
 }
 
 .comp-fleet-header {
@@ -1250,6 +1288,15 @@
         right: 4px;
         transform: none;
     }
+
+}
+
+@media (min-width: 768px) {
+    .comp-nav {
+        position: sticky;
+    }
+
+
 }
 
 /* Trend Chart Section */
@@ -1774,25 +1821,32 @@
     }
 
     /* Mobile Navigation */
-    /* .comp-nav {
-        margin: -1rem -1rem 1rem -1rem;
+    .comp-nav {
+        margin-left: -1rem;
+        margin-right: -1rem;
         width: calc(100% + 2rem);
-    }*/
+    }
 
-    .comp-nav-list {
+    .comp-nav-item a {
+        font-size: 14px;
+    }
+
+    /*   .comp-nav-list {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 0;
-    }
+    }*/
 
     .comp-nav-item {
-        padding: 0.75rem;
+        border-right: 1px solid #e2e8f0;
+        line-height: 1.1;
         text-align: center;
         border-bottom: 1px solid #e2e8f0;
+        /*padding: 1rem 1.25rem;*/
     }
 
-    .comp-nav-item:nth-child(odd) {
-        border-right: 1px solid #e2e8f0;
+    .comp-nav-item:last-child {
+        border-right: none;
     }
 
     /* Mobile Chart Handling */
@@ -1836,5 +1890,346 @@
         margin-bottom: 1rem;
         color: #2c5282;
         font-size: 0.875rem;
+    }
+}
+
+/* Navigation base styles */
+.comp-nav {
+    background: #fff;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.comp-nav-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+.comp-nav-item {
+    /* flex: 1;*/
+    text-align: center;
+    white-space: nowrap;
+}
+
+.comp-nav-item a {
+    text-decoration: none;
+    color: inherit;
+    font-weight: 500;
+    padding: 1rem 1.5rem;
+    display: block;
+}
+
+/* Hide short labels by default */
+.nav-short {
+    display: none;
+}
+
+/* Sliding indicator */
+.comp-nav-list::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background: #4299e1;
+    transition: all 0.3s ease;
+    width: var(--indicator-width, 0);
+    transform: translateX(var(--indicator-left, 0));
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .comp-nav {
+        position: sticky;
+        top: 0;
+        /*width: 100%;*/
+    }
+
+    .comp-nav-list {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .comp-nav-item {
+        flex: 1;
+    }
+
+    .comp-nav-item a {
+        padding: 1rem 0.75rem;
+    }
+
+    /* Show short labels, hide full labels */
+    .nav-full {
+        display: none;
+    }
+
+    .nav-short {
+        display: inline;
+    }
+
+    .comp-ops-card {
+        padding: 0%;
+        box-shadow: none;
+        border-radius: 0%;
+    }
+}
+
+@media (min-width: 1280px) {
+    .comp-ops-grid {
+        grid-template-columns: auto;
+    }
+
+    .comp-fleet-metrics {
+        flex-direction: row;
+    }
+
+    .comp-safety-grid {
+        grid-template-columns: auto;
+    }
+
+    .comp-control-panel {
+        align-items: center !important;
+    }
+}
+
+/* */
+
+/* Control Panel Base */
+.comp-control-panel {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    /* Changed from center to allow better stacking */
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    /* Allow wrapping for medium screens */
+    gap: 1.5rem;
+    /* Consistent spacing when wrapped */
+}
+
+.comp-selected {
+    display: flex;
+    gap: 1.5rem;
+    /*flex: 1;*/
+    min-width: 300px;
+    /* Ensure minimum width for readability */
+    flex-wrap: wrap;
+    /* Allow slots to wrap on medium screens */
+}
+
+.comp-aircraft-slot {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+    flex: 1;
+    min-width: 280px;
+    /* Minimum width for each slot */
+    max-width: calc(50% - 0.75rem);
+    /* Maximum width accounting for gap */
+}
+
+.comp-options {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    /* Allow buttons to wrap if needed */
+}
+
+.comp-btn {
+    padding: 0.75rem 1.25rem;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+/* Medium screens */
+@media (max-width: 1200px) {
+    .comp-control-panel {
+        padding: 1rem;
+    }
+
+    .comp-selected {
+        width: 100%;
+        /* Full width on medium screens */
+    }
+
+    .comp-aircraft-slot {
+        max-width: calc(50% - 0.75rem);
+        /* Two columns */
+    }
+
+    .comp-options {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+/* Small tablets and large phones */
+@media (max-width: 900px) {
+    .comp-aircraft-slot {
+        max-width: 100%;
+        /* Full width on smaller screens */
+    }
+
+    .comp-options {
+        justify-content: stretch;
+    }
+
+    .comp-btn {
+        flex: 1;
+        /* Buttons take equal width */
+    }
+}
+
+/* Mobile screens */
+@media (max-width: 768px) {
+    .comp-control-panel {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+
+    .comp-aircraft-slot {
+        width: 100%;
+        min-width: unset;
+    }
+
+    /* .comp-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+    }*/
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .comp-options {
+        grid-template-columns: 1fr;
+        /* Stack buttons vertically */
+    }
+}
+
+/* Add to comparison.css */
+
+.comp-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin: 2rem auto;
+    max-width: 600px;
+}
+
+.comp-empty-icon {
+    color: #3182ce;
+    margin-bottom: 1.5rem;
+}
+
+.comp-empty-state h2 {
+    margin: 0 0 1rem;
+    font-size: 1.5rem;
+    color: #2d3748;
+}
+
+.comp-empty-state p {
+    margin: 0 0 2rem;
+    color: #4a5568;
+    max-width: 400px;
+}
+
+.comp-primary-btn {
+    background: #3182ce;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.comp-primary-btn:hover {
+    background: #2c5282;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .comp-empty-state {
+        margin: 1rem;
+        padding: 2rem 1rem;
+    }
+}
+
+.comp-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin: 2rem auto;
+    max-width: 600px;
+}
+
+.comp-empty-icon {
+    color: #3182ce;
+    margin-bottom: 1.5rem;
+}
+
+.comp-empty-state h2 {
+    margin: 0 0 1rem;
+    font-size: 1.5rem;
+    color: #2d3748;
+}
+
+.comp-empty-state p {
+    margin: 0 0 2rem;
+    color: #4a5568;
+    max-width: 400px;
+}
+
+.comp-primary-btn {
+    background: #3182ce;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.comp-primary-btn:hover {
+    background: #2c5282;
+}
+
+@media (max-width: 768px) {
+    .comp-empty-state {
+        margin: 1rem;
+        padding: 2rem 1rem;
     }
 }

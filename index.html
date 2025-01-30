@@ -694,8 +694,50 @@
             </div>
         </div>
     </footer>
+    <div class="feature-toast">
+        <div class="toast-content">
+            <span class="new-label">Just Launched</span>
+            <h4>Aircraft Safety Comparison</h4>
+            <p>Compare safety metrics between different aircraft models</p>
+            <button class="explore-btn" onclick="location.href='comparison.html';">Explore Feature</button>
+
+        </div>
+        <button class="close-toast">×</button>
+    </div>
     <script src="mockData.js"></script>
     <script src="check2.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Create audio element
+            const notificationSound = new Audio();
+            notificationSound.src = 'notification.mp3'; // You can use .wav or .ogg as alternatives
+            notificationSound.volume = 0.5; // Adjust volume (0.0 to 1.0)
+
+            // Show toast notification after users have had time to view the main interface
+            const toast = document.querySelector('.feature-toast');
+
+            if (toast) {
+                // Wait for 5 seconds before showing the toast
+                setTimeout(() => {
+                    toast.classList.add('show');
+                    // Play sound when toast appears
+                    notificationSound.play().catch(error => {
+                        // Handle any autoplay restrictions silently
+                        console.log('Sound could not be played:', error);
+                    });
+                }, 10000);
+
+                // Add click event listener for close button
+                const closeBtn = toast.querySelector('.close-toast');
+                closeBtn?.addEventListener('click', function () {
+                    toast.style.animation = 'slideDown 0.5s forwards';
+                    setTimeout(() => {
+                        toast.remove();
+                    }, 500);
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

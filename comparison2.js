@@ -355,30 +355,63 @@ class AircraftComparison {
             // Clear any existing state
             this.comparedAircraft.clear();
 
-            // Load primary aircraft first
-            const primaryAircraft = await this.loadPrimaryAircraft();
-            if (!primaryAircraft) throw new Error('Failed to load primary aircraft');
+            if (this.primaryAircraftId) {
+                // Load primary aircraft if ID exists in URL
+                const primaryAircraft = await this.loadPrimaryAircraft();
+                if (!primaryAircraft) throw new Error('Failed to load primary aircraft');
 
-            // Set up event listeners early
-            this.setupEventListeners();
-            this.initializeComparisonSlots();
+                // Set up event listeners and initialize slots
+                this.setupEventListeners();
+                this.initializeComparisonSlots();
 
-            // Load comparison aircraft sequentially
-            if (this.compareIds.length > 0) {
-                for (const id of this.compareIds) {
-                    const comparisonAircraft = await this.addAircraftToComparison(id);
-                    if (!comparisonAircraft) {
-                        console.warn(`Failed to load comparison aircraft ${id}`);
+                // Load comparison aircraft if any
+                if (this.compareIds.length > 0) {
+                    for (const id of this.compareIds) {
+                        const comparisonAircraft = await this.addAircraftToComparison(id);
+                        if (!comparisonAircraft) {
+                            console.warn(`Failed to load comparison aircraft ${id}`);
+                        }
                     }
                 }
-            }
 
-            // Final update after all aircraft are loaded
-            this.updateComparison();
+                this.updateComparison();
+            } else {
+                // Show empty state when no aircraft ID in URL
+                this.showEmptyState();
+                this.setupEmptyStateEventListeners();
+            }
 
         } catch (error) {
             console.error('Error during initialization:', error);
             this.handleError(error);
+        }
+    }
+
+    showEmptyState() {
+        const mainContent = document.querySelector('.comp-main');
+        mainContent.innerHTML = `
+            <div class="comp-empty-state">
+                <div class="comp-empty-icon">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                        <path d="M3.3 7L12 12l8.7-5M12 22V12"/>
+                    </svg>
+                </div>
+                <h2>Start Aircraft Comparison</h2>
+                <p>Select an aircraft to begin comparing specifications, safety features, and performance metrics.</p>
+                <button class="comp-btn comp-primary-btn" id="startComparison">
+                    Select First Aircraft
+                </button>
+            </div>
+        `;
+    }
+
+    setupEmptyStateEventListeners() {
+        const startButton = document.getElementById('startComparison');
+        if (startButton) {
+            startButton.addEventListener('click', () => {
+                this.renderAircraftSelector(true);
+            });
         }
     }
 
@@ -433,7 +466,13 @@ class AircraftComparison {
         this.renderAircraftSelector();
     }
 
-    renderAircraftSelector() {
+    renderAircraftSelector(isFirstSelection = false) {
+
+        const existingSelector = document.querySelector('.comp-selector-container');
+        if (existingSelector) {
+            existingSelector.remove();
+        }
+
         const availableAircraft = mockDatabase.aircraft.filter(
             aircraft => !this.comparedAircraft.has(aircraft.id)
         );
@@ -441,20 +480,20 @@ class AircraftComparison {
         const selectorHtml = `
             <div class="comp-selector">
                 <div class="comp-selector-header">
-                    <h3>Select Aircraft to Compare</h3>
+                    <h3>${isFirstSelection ? 'Select First Aircraft' : 'Select Aircraft to Compare'}</h3>
                     <button class="comp-selector-close">×</button>
                 </div>
                 <div class="comp-selector-filters">
-                <input type="text" 
-                       class="comp-search-box" 
-                       placeholder="Search aircraft by model or manufacturer">
-                <div class="comp-filter-options">
-                    <button class="comp-filter-btn active" data-filter="all">All</button>
-                    <button class="comp-filter-btn" data-filter="Commercial">Commercial</button>
-                    <button class="comp-filter-btn" data-filter="Private">Private</button>
-                    <button class="comp-filter-btn" data-filter="Military">Military</button>
+                    <input type="text" 
+                           class="comp-search-box" 
+                           placeholder="Search aircraft by model or manufacturer">
+                    <div class="comp-filter-options">
+                        <button class="comp-filter-btn active" data-filter="all">All</button>
+                        <button class="comp-filter-btn" data-filter="Commercial">Commercial</button>
+                        <button class="comp-filter-btn" data-filter="Private">Private</button>
+                        <button class="comp-filter-btn" data-filter="Military">Military</button>
+                    </div>
                 </div>
-            </div>
                 <div class="comp-selector-content">
                     ${availableAircraft.map(aircraft => `
                         <div class="comp-selector-item" data-id="${aircraft.id}">
@@ -472,10 +511,67 @@ class AircraftComparison {
         `;
 
         const selectorContainer = document.createElement('div');
-        selectorContainer.className = 'comp-selector-container';
+        selectorContainer.className = 'comp-selector-container'; // Remove 'active' class from here
         selectorContainer.innerHTML = selectorHtml;
         document.body.appendChild(selectorContainer);
+
+        if (isFirstSelection) {
+            selectorContainer.classList.add('active'); // Only add active for first selection
+            this.setupFirstSelectionEvents(selectorContainer);
+        }
+
         this.setupSelectorEvents();
+    }
+
+    setupFirstSelectionEvents(selectorContainer) {
+        // Remove previous event listeners
+        const oldItems = document.querySelectorAll('.comp-selector-item');
+        oldItems.forEach(item => {
+            item.replaceWith(item.cloneNode(true));
+        });
+
+        // Add click handlers to all items
+        const addClickHandler = () => {
+            const items = selectorContainer.querySelectorAll('.comp-selector-item');
+            items.forEach(item => {
+                item.addEventListener('click', () => {
+                    const aircraftId = parseInt(item.dataset.id);
+                    // Update URL with selected aircraft ID
+                    window.history.pushState({}, '', `?id=${aircraftId}`);
+                    // Reload page to initialize with new aircraft
+                    window.location.reload();
+                });
+            });
+        };
+
+        // Initial click handlers
+        addClickHandler();
+
+        // Re-add click handlers after filtering
+        const filterBtns = selectorContainer.querySelectorAll('.comp-filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Wait for DOM to update after filtering
+                setTimeout(addClickHandler, 100);
+            });
+        });
+
+        // Re-add click handlers after search
+        const searchBox = selectorContainer.querySelector('.comp-search-box');
+        if (searchBox) {
+            searchBox.addEventListener('input', () => {
+                // Wait for DOM to update after search
+                setTimeout(addClickHandler, 100);
+            });
+        }
+
+        // Close button for first selection
+        const closeBtn = selectorContainer.querySelector('.comp-selector-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                selectorContainer.remove();
+            });
+        }
     }
 
     setupSelectorEvents() {
@@ -1676,6 +1772,8 @@ class AircraftComparison {
     }
 
 }
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const navItems = document.querySelectorAll('.comp-nav-item');
