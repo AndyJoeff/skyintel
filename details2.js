@@ -125,33 +125,49 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
         </div>
     </div>
-    <div class="aircraft-action-bar">
-    <button class="action-button" data-section="specifications">
-        <i class="fas fa-cog"></i>
-        Specifications
-    </button>
-    <button class="action-button" data-section="safety">
-        <i class="fas fa-shield-alt"></i>
-        Safety Features
-    </button>
-    <button class="action-button" data-section="maintenance">
-        <i class="fas fa-tools"></i>
-        Maintenance
-    </button>
-    <button class="action-button" data-section="performance">
-        <i class="fas fa-tachometer-alt"></i>
-        Performance
-    </button>
-    <button class="action-button compare-button" onclick="window.location.href='comparison.html?id=${aircraft.id}'">
-    <i class="fas fa-balance-scale"></i>
-    Compare
-</button>
 </div>
-</div>
+
+
+<nav class="details-nav">
+    <ul class="details-nav-list">
+        <li class="details-nav-item active">
+            <a href="#specifications">
+                <span class="nav-full">Specifications</span>
+                <span class="nav-short">Specs</span>
+            </a>
+        </li>
+        <li class="details-nav-item">
+            <a href="#safety">
+                <span class="nav-full">Safety Features</span>
+                <span class="nav-short">Safety</span>
+            </a>
+        </li>
+        <li class="details-nav-item">
+            <a href="#maintenance">
+                <span class="nav-full">Maintenance</span>
+                <span class="nav-short">Maint.</span>
+            </a>
+        </li>
+        <li class="details-nav-item">
+            <a href="#performance">
+                <span class="nav-full">Performance</span>
+                <span class="nav-short">Perf.</span>
+            </a>
+        </li>
+        <li class="details-nav-item details-nav-compare">
+            <a href="comparison.html?id=${aircraft.id}" style="display: flex; align-items: center; gap: 0.5rem;">
+                <span class="nav-full">Compare</span>
+                <span class="nav-short">Compare</span>
+                <i class="fas fa-arrow-up-right-from-square"></i>
+            </a>
+        </li>
+    </ul>
+</nav>
+
 
 
 <div class="details-grid">
-    <div class="specifications-card">
+    <div class="specifications-card" id="specifications" >
         <div class="card-header">
             <h2>Aircraft Specifications</h2>
             <div class="header-subtitle">Technical specifications and performance metrics</div>
@@ -260,7 +276,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
         </div>
     </div>
-    <div class="safety-features-card">
+    <div class="safety-features-card" id="safety">
     <div class="card-header">
         <h2>Safety Features & Systems</h2>
         <div class="header-subtitle">Advanced safety features and certification details</div>
@@ -290,7 +306,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </div>
 
-<div class="maintenance-card">
+<div class="maintenance-card" id="maintenance">
 <div class="card-header">
     <h2>Maintenance Requirements</h2>
     <div class="header-subtitle">Standard maintenance checks and inspection schedules</div>
@@ -336,8 +352,8 @@ document.addEventListener("DOMContentLoaded", function () {
 </div>
 
 </div>
-</div>
-<div class="charts-card">
+
+<div class="charts-card" id="performance">
     <h2>Performance Analytics</h2>
     <div class="charts-grid">
         <div class="chart-container">
@@ -364,7 +380,6 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
     </div>
 </div>
-</div>
 
         <div class="coming-soon-notice">
             <p>More detailed analysis and historical data coming soon...</p>
@@ -375,6 +390,96 @@ document.addEventListener("DOMContentLoaded", function () {
             <button class="print-button" onclick="window.print()">Print Report</button>
         </div>
     `;
+
+    // Initialize navigation
+    function initializeNavigation() {
+        const navItems = document.querySelectorAll('.details-nav-item');
+        const navList = document.querySelector('.details-nav-list');
+        const sections = document.querySelectorAll('[id]');
+        let isScrollingProgrammatically = false;
+        let scrollTimeout;
+
+        // Function to update the sliding indicator
+        const updateIndicator = (activeItem) => {
+            const itemRect = activeItem.getBoundingClientRect();
+            const listRect = navList.getBoundingClientRect();
+
+            navList.style.setProperty('--indicator-width', `${itemRect.width}px`);
+            navList.style.setProperty('--indicator-left', `${itemRect.left - listRect.left}px`);
+        };
+
+        // Handle click navigation
+        navItems.forEach(item => {
+            if (item.classList.contains('details-nav-compare')) return;
+
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                updateIndicator(item);
+
+                isScrollingProgrammatically = true;
+
+                const targetId = item.querySelector('a').getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
+
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    isScrollingProgrammatically = false;
+                }, 1000);
+            });
+        });
+
+        // Handle scroll-based navigation
+        const observerCallback = (entries) => {
+            if (isScrollingProgrammatically) return;
+
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const targetId = entry.target.id;
+                    const correspondingNav = document.querySelector(`.details-nav-item a[href="#${targetId}"]`)?.parentElement;
+
+                    if (correspondingNav) {
+                        navItems.forEach(item => item.classList.remove('active'));
+                        correspondingNav.classList.add('active');
+                        updateIndicator(correspondingNav);
+                    }
+                }
+            });
+        };
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '-20% 0px -79% 0px',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+        // Observe sections
+        sections.forEach(section => {
+            if (section.id && ['specifications', 'safety', 'maintenance', 'performance'].includes(section.id)) {
+                observer.observe(section);
+            }
+        });
+
+        // Set initial indicator position
+        const activeItem = document.querySelector('.details-nav-item.active') || navItems[0];
+        updateIndicator(activeItem);
+
+        // Update indicator on resize
+        window.addEventListener('resize', () => {
+            const activeItem = document.querySelector('.details-nav-item.active') || navItems[0];
+            updateIndicator(activeItem);
+        });
+    }
+
+    // Initialize navigation after content is rendered
+    setTimeout(initializeNavigation, 100);
 
     // Initialize charts
     createSafetyTrendChart(aircraft.operationalMetrics.safetyTrend);

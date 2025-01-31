@@ -1,3 +1,56 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // Elements
+    const navToggle = document.querySelector('.nav-toggle');
+    const userToggle = document.querySelector('.user-toggle');
+    const searchToggle = document.querySelector('.search-toggle');
+    const navSidebar = document.querySelector('.nav-sidebar');
+    const authSidebar = document.querySelector('.auth-sidebar');
+    const overlay = document.getElementById('overlay');
+    const closeBtns = document.querySelectorAll('.close-sidebar');
+
+    // Functions
+    const openSidebar = (sidebar) => {
+        closeAllSidebars(); // Close any open sidebar first
+        sidebar.classList.add('active');
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeAllSidebars = () => {
+        navSidebar.classList.remove('active');
+        authSidebar.classList.remove('active');
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+    };
+
+    // Event Listeners
+    navToggle.addEventListener('click', () => {
+        openSidebar(navSidebar);
+    });
+
+    userToggle.addEventListener('click', () => {
+        openSidebar(authSidebar);
+    });
+
+    closeBtns.forEach(btn => {
+        btn.addEventListener('click', closeAllSidebars);
+    });
+
+    overlay.addEventListener('click', closeAllSidebars);
+
+    // Close sidebars on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeAllSidebars();
+    });
+
+    // Prevent scrolling when sidebar is open
+    document.addEventListener('touchmove', (e) => {
+        if (!overlay.classList.contains('hidden')) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+});
+
 //Progress bar
 const progressBar = {
     element: null,
