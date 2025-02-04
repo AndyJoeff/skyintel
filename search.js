@@ -100,6 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+      overlay.addEventListener('click', () => {
+        searchSidebar.classList.remove('active');
+    });
+
     closeBtns.addEventListener('click', () => {
         searchSidebar.classList.remove('active');
 
