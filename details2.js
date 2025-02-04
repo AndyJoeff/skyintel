@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
     <div class="aircraft-details">
         <div class="aircraft-top-header">
             <div class="aircraft-title">
-                <h1>${aircraft.model}</h1>
+                <h1 title="${aircraft.model}">${aircraft.model}</h1>
                 <div class="manufacturer">
                     <span class="label">Manufacturer:</span>
                     <span class="value">${aircraft.manufacturer}</span>

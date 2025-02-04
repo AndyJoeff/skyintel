@@ -17,6 +17,7 @@
   <script src="mockData.js"></script>
   <script src="details2.js"></script>
   <script src="check2.js"></script>
+  <script src="search.js"></script>
 
 
 
@@ -27,7 +28,8 @@
   <header class="header">
     <nav class="nav-container">
       <div class="logo">
-        <a href="#"><img src="images/SkyIntel-logo.png" alt="Aircraft Safety Analyzer Logo" class="logo-img"></a>
+        <a href="index.html"><img src="images/SkyIntel-logo.png" alt="Aircraft Safety Analyzer Logo"
+            class="logo-img"></a>
       </div>
 
       <!-- Desktop Menu -->
@@ -39,10 +41,15 @@
         <li class="nav-item"><a href="comparison.html" class="nav-link">Compare</a></li>
       </ul>
 
-      <!-- Desktop CTA -->
-      <div class="nav-cta desktop-cta">
-        <a href="#" class="btn btn-login">Log In</a>
-        <a href="#" class="btn btn-signup">Sign Up</a>
+      <!-- Desktop Actions-->
+      <div class="desktop-actions">
+        <button class="icon-btn desktop-search-toggle">
+          <i class="fas fa-search"></i>
+        </button>
+        <div class="nav-cta">
+          <a href="#" class="btn btn-login">Log In</a>
+          <a href="#" class="btn btn-signup">Sign Up</a>
+        </div>
       </div>
 
       <!-- Mobile Icons -->
@@ -59,6 +66,53 @@
       </div>
     </nav>
   </header>
+  <!-- Desktop Search Panel -->
+  <div class="search-panel">
+    <button class="closex"
+      style="float: right; padding: 5px 10px; font-size: 1em; background: none; border: none; cursor: pointer;">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="header-search-container">
+      <div class="search-input-wrapper">
+        <input type="text" id="search-input" placeholder="Search by model, manufacturer, or type...">
+        <button class="clear-search hidden">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div class="header-search-results">
+      <div class="recent-searches" style="padding: 0 12px;">
+        <h3>Recent Searches</h3>
+        <div class="recent-list"></div>
+      </div>
+      <div class="results-list"></div>
+    </div>
+  </div>
+
+  <!-- Mobile Search Sidebar -->
+  <div class="sidebar search-sidebar">
+    <div class="sidebar-header">
+      <h2>Search Aircraft</h2>
+      <button class="close-sidebar">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="mobile-search-container">
+      <div class="search-input-wrapper">
+        <input type="text" id="mobile-search-input" placeholder="Search by model, manufacturer, or type...">
+        <button class="clear-search hidden">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div class="mobile-search-results">
+      <div class="recent-searches">
+        <h3>Recent Searches</h3>
+        <div class="recent-list"></div>
+      </div>
+      <div class="results-list"></div>
+    </div>
+  </div>
 
   <!-- Mobile Sidebars -->
   <!-- Main Navigation Sidebar -->

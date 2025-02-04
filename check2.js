@@ -43,12 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape') closeAllSidebars();
     });
 
-    // Prevent scrolling when sidebar is open
-    document.addEventListener('touchmove', (e) => {
-        if (!overlay.classList.contains('hidden')) {
-            e.preventDefault();
-        }
-    }, { passive: false });
+
 });
 
 //Progress bar
