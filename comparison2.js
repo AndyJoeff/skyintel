@@ -1790,6 +1790,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let isScrollingProgrammatically = false;
     let scrollTimeout;
 
+     document.querySelector('.comp-add-btn').addEventListener('click', () => {
+        document.body.style.overflow = 'hidden';
+    });
+
+    document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('comp-selector-close')) {
+            document.body.style.overflow = 'auto';
+        }
+    });
+
     // Function to update the sliding indicator
     const updateIndicator = (activeItem) => {
         const itemRect = activeItem.getBoundingClientRect();
