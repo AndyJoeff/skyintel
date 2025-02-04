@@ -1773,7 +1773,15 @@ class AircraftComparison {
 
 }
 
+ document.querySelector('.comp-add-btn').addEventListener('click', () => {
+        document.body.style.overflow = 'hidden';
+    });
 
+    document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('comp-selector-close')) {
+            document.body.style.overflow = 'auto';
+        }
+    });
 
 document.addEventListener('DOMContentLoaded', () => {
     const navItems = document.querySelectorAll('.comp-nav-item');
