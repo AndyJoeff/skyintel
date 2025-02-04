@@ -1780,8 +1780,20 @@ document.addEventListener('DOMContentLoaded', () => {
     let isScrollingProgrammatically = false;
     let scrollTimeout;
 
-     document.querySelector('.comp-add-btn').addEventListener('click', () => {
+      document.querySelector('.comp-add-btn').addEventListener('click', () => {
         document.body.style.overflow = 'hidden';
+    });
+
+    document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('comp-primary-btn')) {
+            document.body.style.overflow = 'hidden';
+        }
+    });
+
+    document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('comp-selector-item')) {
+            document.body.style.overflow = 'auto';
+        }
     });
 
     document.addEventListener('click', (event) => {
@@ -1789,7 +1801,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.style.overflow = 'auto';
         }
     });
-
     // Function to update the sliding indicator
     const updateIndicator = (activeItem) => {
         const itemRect = activeItem.getBoundingClientRect();
