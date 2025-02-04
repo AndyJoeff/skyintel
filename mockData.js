@@ -1309,7 +1309,7 @@ const mockDatabase = {
     },
     {
       id: 12,
-      model: "Gulfstream",
+      model: "Gulfstream-G650",
       manufacturer: "Gulfstream Aerospace",
       type: "Private",
       year: 2012,
