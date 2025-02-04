@@ -1275,7 +1275,7 @@ class AircraftComparison {
                 datasets: [{
                     label: 'Incident Rate per 100,000 flights',
                     data: aircraftData.map(a => a.incidentRate * 100000),
-                    backgroundColor: aircraftData.map((_, i) => this.getAircraftColor(i)),
+                    backgroundColor: aircraftData.map(aircraft => this.getAircraftColor(aircraft.id)),
                 }]
             },
             options: {
