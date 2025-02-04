@@ -1278,9 +1278,9 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .comp-tooltip:hover::before {
-        left: auto;
+        left: 100%;
         right: 0;
-        transform: none;
+        max-width: 40vh;
     }
 
     .comp-tooltip:hover::after {
