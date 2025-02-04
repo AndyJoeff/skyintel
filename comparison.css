@@ -1982,7 +1982,7 @@
 }
 
 @media (min-width: 1280px) {
-    .comp-ops-grid {
+   .comp-ops-grid {
         grid-template-columns: auto;
     }
 
@@ -1990,9 +1990,9 @@
         flex-direction: row;
     }
 
-    .comp-safety-grid {
+   /* .comp-safety-grid {
         grid-template-columns: auto;
-    }
+    }*/
 
     .comp-control-panel {
         align-items: center !important;
