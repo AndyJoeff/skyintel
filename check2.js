@@ -510,8 +510,8 @@ document.addEventListener('DOMContentLoaded', function () {
                      <span class="stat-value">${result.lastIncidentDate}</span>
                 </div>
             </div>
-            <button class="view-report">
-            </i><a href="details.html?id=${result.id}">View Full Report</a></button>
+            <button class="view-report" onclick="location.href='details.html?id=${result.id}';">
+            <a href="details.html?id=${result.id}">View Full Report</a></button>
                    
                 </div>
             `;
