@@ -2333,6 +2333,9 @@
         height: 100%;
     }
 }
+button.icon-btn.search-toggle {
+    display: block;
+}
 
 /* Desktop Actions */
 .desktop-actions {
