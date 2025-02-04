@@ -1542,6 +1542,9 @@
         font-size: 14px;
         font-weight: 500;
     }
+button.icon-btn.search-toggle {
+    display: block;
+}
 
     /* Mobile specific styles */
     @media (max-width: 768px) {
