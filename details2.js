@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false, // Allow height adjustments
                 plugins: {
                     title: {
                         display: true,
@@ -42,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
         });
     }
+
 
     function createReliabilityChart(data) {
         const ctx = document.getElementById("reliabilityChart").getContext("2d");
@@ -356,14 +358,18 @@ document.addEventListener("DOMContentLoaded", function () {
 <div class="charts-card" id="performance">
     <h2>Performance Analytics</h2>
     <div class="charts-grid">
+    <div class="chart-trends">
         <div class="chart-container">
             <h3>Safety Score Trend</h3>
             <canvas id="safetyTrendChart"></canvas>
         </div>
+    </div>
+    <div class="chart-trends">
         <div class="chart-container">
             <h3>Monthly Reliability Metrics</h3>
             <canvas id="reliabilityChart"></canvas>
         </div>
+    </div>
     </div>
     <div class="metrics-summary">
         <div class="summary-item">
@@ -484,7 +490,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initialize charts
     createSafetyTrendChart(aircraft.operationalMetrics.safetyTrend);
     createReliabilityChart(aircraft.operationalMetrics.safetyTrend);
+
+
 });
+
 
 function getSafetyScorebgColor(score) {
     if (score >= 90) return "#4CAF50";
