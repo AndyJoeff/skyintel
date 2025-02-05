@@ -102,7 +102,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       overlay.addEventListener('click', () => {
         searchSidebar.classList.remove('active');
-          document.body.style.overflow = '';
+        mainContent.style.position = '';
+        mainContent.style.top = '';
+        mainContent.style.width = '';
+        window.scrollTo(0, scrollPosition);
     });
           
     closeBtns.addEventListener('click', () => {
