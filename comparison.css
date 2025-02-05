@@ -1361,9 +1361,6 @@
 }
 
 /* Status Colors - Updated for better contrast */
-.comp-metric-value.excellent {
-    background: #def7ec;
-}
 
 .comp-metric-value.excellent .comp-score,
 .comp-metric-value.excellent .comp-rate,
@@ -1372,9 +1369,6 @@
     color: #046c4e;
 }
 
-.comp-metric-value.good {
-    background: #e1effe;
-}
 
 .comp-metric-value.good .comp-score,
 .comp-metric-value.good .comp-rate,
@@ -1383,9 +1377,6 @@
     color: #1e429f;
 }
 
-.comp-metric-value.fair {
-    background: #fef3c7;
-}
 
 .comp-metric-value.fair .comp-score,
 .comp-metric-value.fair .comp-rate,
@@ -1394,15 +1385,47 @@
     color: #92400e;
 }
 
-.comp-metric-value.poor {
-    background: #fee2e2;
-}
 
 .comp-metric-value.poor .comp-score,
 .comp-metric-value.poor .comp-rate,
 .comp-metric-value.poor .comp-mtbce,
 .comp-metric-value.poor .comp-reliability {
     color: #991b1b;
+}
+
+/* Add a common class or data attribute to all metric values */
+[class*="comp-metric-value"] {
+    position: relative;
+    background-size: 100% 200% !important;
+    background-position: top;
+    animation: fillBackground 2s ease forwards;
+}
+
+/* Define specific background colors for each variant */
+.comp-metric-value.good {
+    background: linear-gradient(to top, rgb(225, 239, 254) 50%, transparent 50%);
+}
+
+.comp-metric-value.excellent {
+    background: linear-gradient(to top, rgb(222, 247, 236) 50%, transparent 50%);
+}
+
+.comp-metric-value.fair {
+    background: linear-gradient(to top, #fef3c7 50%, transparent 50%);
+}
+
+.comp-metric-value.poor {
+    background: linear-gradient(to top, rgb(254, 226, 226) 50%, transparent 50%);
+}
+
+@keyframes fillBackground {
+    from {
+        background-position: top;
+    }
+
+    to {
+        background-position: bottom;
+    }
 }
 
 /* Add to your comparison.css */
@@ -1982,7 +2005,7 @@
 }
 
 @media (min-width: 1280px) {
-   .comp-ops-grid {
+    .comp-ops-grid {
         grid-template-columns: auto;
     }
 
@@ -1990,7 +2013,7 @@
         flex-direction: row;
     }
 
-   /* .comp-safety-grid {
+    /* .comp-safety-grid {
         grid-template-columns: auto;
     }*/
 
@@ -2333,6 +2356,7 @@
         height: 100%;
     }
 }
+
 button.icon-btn.search-toggle {
     display: block;
 }
