@@ -427,6 +427,44 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function createScrollAnimations() {
+        setTimeout(() => {
+            const searchResultsContainer = document.querySelector('.search-results');
+
+            if (!searchResultsContainer) return;
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const resultAnimator = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    const resultCard = entry.target;
+                    const safetyBadge = resultCard.querySelector('.safety-score-badge');
+                    const svgCircle = safetyBadge?.querySelector('.circle');
+
+                    if (svgCircle) {
+                        // If entering viewport
+                        if (entry.isIntersecting) {
+                            svgCircle.classList.add('chart-animate');
+                        } else {
+                            // If leaving viewport, remove the class to reset animation
+                            svgCircle.classList.remove('chart-animate');
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            // Observe each result card
+            const resultCards = searchResultsContainer.querySelectorAll('.result-card');
+            resultCards.forEach(card => {
+                resultAnimator.observe(card);
+            });
+        }, 200);
+    }
+
     function displayResults(results, isFeatured = false) {
         currentResults = results; // Store the full results
 
@@ -530,6 +568,9 @@ document.addEventListener('DOMContentLoaded', function () {
             existingResults.remove();
         }
         document.querySelector('.main-tool').appendChild(resultsContainer);
+
+        // Ensure this is called
+        createScrollAnimations()
     }
 
     function createPagination(totalPages) {
@@ -575,6 +616,8 @@ document.addEventListener('DOMContentLoaded', function () {
         pagination.appendChild(nextButton);
 
         return pagination;
+
+        createScrollAnimations();
     }
 
     async function handlePageChange(newPage) {
