@@ -753,7 +753,7 @@
 
     .chart-container {
         position: relative;
-        height: 260px;
+        height: 290px;
     }
 
 
@@ -779,7 +779,7 @@
         }
 
         #details-container {
-            padding: 20px;
+            padding: 1em;
         }
 
         .chart {
@@ -1233,8 +1233,6 @@
     }
 
     .chart-container {
-        background: #f8f9fa;
-        border-radius: 8px;
         padding: 1.5rem;
     }
 
@@ -1279,11 +1277,12 @@
         }
 
         .charts-grid {
-            gap: 1rem;
+            gap: 3rem;
         }
 
         .chart-container {
             padding: 1rem;
+            margin: 0 -1rem;
         }
     }
 
@@ -1542,10 +1541,10 @@
         font-size: 14px;
         font-weight: 500;
     }
-button.icon-btn.search-toggle {
-    display: block;
-}
 
+    button.icon-btn.search-toggle {
+        display: block;
+    }
     /* Mobile specific styles */
     @media (max-width: 768px) {
         .search-panel {
@@ -1747,4 +1746,28 @@ button.icon-btn.search-toggle {
             gap: 0.6rem;
         }
 
+    }
+
+    #safetyTrendChart {
+        width: 100%;
+        height: 400px;
+        /* Default height */
+    }
+
+    @media (max-width: 768px) {
+        #safetyTrendChart {
+            height: 500px;
+            /* Taller height for better mobile visibility */
+        }
+    }
+
+    .chart-trends {
+        height: 340px;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    #reliabilityChart {
+        width: 100% !important;
+        /* Ensures it scales with container */
     }
