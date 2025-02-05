@@ -14,53 +14,189 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
+    function createScrollAnimations() {
+        setTimeout(() => {
+            const chartContainers = document.querySelectorAll('.chart-container');
 
-    // Create charts using Chart.js
-    function createSafetyTrendChart(data) {
-        const ctx = document.getElementById("safetyTrendChart").getContext("2d");
-        return new Chart(ctx, {
-            type: "line",
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const chartAnimator = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const canvas = entry.target.querySelector('canvas');
+                        const chartInstance = Chart.getChart(canvas);
+
+                        if (canvas && chartInstance) {
+                            // Recreate the chart with full original animation settings
+                            const chartConfig = chartInstance.config;
+
+                            // Preserve the original dataset and options
+                            chartConfig.data.datasets[0].animation = {
+                                duration: 1500,
+                                easing: 'easeOutQuart'
+                            };
+
+                            // Restore specific animation options
+                            if (chartConfig.type === 'line') {
+                                // Restore the dash animation for line chart
+                                chartConfig.options.animation = {
+                                    onProgress: function (animation) {
+                                        const chartInstance = animation.chart;
+                                        const ctx = chartInstance.ctx;
+                                        ctx.save();
+                                        ctx.strokeStyle = '#6CA6C1';
+                                        ctx.lineWidth = 3;
+                                        ctx.setLineDash([10, 5]);
+                                        ctx.lineDashOffset = animation.currentStep / animation.numSteps * 100;
+                                        chartInstance.data.datasets.forEach(function (dataset) {
+                                            ctx.strokeRect(
+                                                chartInstance.chartArea.left,
+                                                chartInstance.chartArea.top,
+                                                chartInstance.chartArea.right - chartInstance.chartArea.left,
+                                                chartInstance.chartArea.bottom - chartInstance.chartArea.top
+                                            );
+                                        });
+                                        ctx.restore();
+                                    }
+                                };
+                            }
+
+                            if (chartConfig.type === 'bar') {
+                                // Restore staggered bar animation
+                                chartConfig.options.animation = {
+                                    delay: (context) => {
+                                        return context.dataIndex * 200; // Staggered animation for bars
+                                    }
+                                };
+                            }
+
+                            // Destroy and recreate the chart
+                            chartInstance.destroy();
+                            new Chart(canvas, chartConfig);
+
+                            // Trigger the canvas animation
+                            canvas.classList.add('chart-animate');
+
+                            // REMOVE the line that stops observing the element
+                            // This allows the animation to happen every time the chart enters the viewport
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            chartContainers.forEach(container => {
+                chartAnimator.observe(container);
+            });
+        }, 200);
+    }
+
+    function initializeCharts(aircraft) {
+        // Safety Trend Chart (keep the original implementation)
+        const safetyCtx = document.getElementById('safetyTrendChart').getContext('2d');
+        const safetyChart = new Chart(safetyCtx, {
+            type: 'line',
             data: {
-                labels: data.yearlyTrend.years,
-                datasets: [
-                    {
-                        label: "Safety Score Trend",
-                        data: data.yearlyTrend.safetyScores,
-                        borderColor: "#2196F3",
-                        tension: 0.4,
-                    },
-                ],
+                labels: aircraft.operationalMetrics.safetyTrend.yearlyTrend.years,
+                datasets: [{
+                    label: 'Safety Score',
+                    data: aircraft.operationalMetrics.safetyTrend.yearlyTrend.safetyScores,
+                    borderColor: '#6CA6C1',
+                    backgroundColor: 'rgba(108, 166, 193, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeOutQuart'
+                    }
+                }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false, // Allow height adjustments
+                maintainAspectRatio: false,
                 plugins: {
-                    title: {
-                        display: true,
-                        text: "Safety Score Trend Over Years",
-                    },
+                    legend: {
+                        display: false
+                    }
                 },
-            },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 70,
+                        max: 100
+                    }
+                },
+                animation: {
+                    duration: 0, // Initially disable animation
+                    onProgress: function (animation) {
+                        const chartInstance = animation.chart;
+                        const ctx = chartInstance.ctx;
+                        ctx.save();
+                        ctx.strokeStyle = '#6CA6C1';
+                        ctx.lineWidth = 3;
+                        ctx.setLineDash([10, 5]);
+                        ctx.lineDashOffset = animation.currentStep / animation.numSteps * 100;
+                        chartInstance.data.datasets.forEach(function (dataset) {
+                            ctx.strokeRect(
+                                chartInstance.chartArea.left,
+                                chartInstance.chartArea.top,
+                                chartInstance.chartArea.right - chartInstance.chartArea.left,
+                                chartInstance.chartArea.bottom - chartInstance.chartArea.top
+                            );
+                        });
+                        ctx.restore();
+                    }
+                }
+            }
         });
-    }
 
-
-    function createReliabilityChart(data) {
-        const ctx = document.getElementById("reliabilityChart").getContext("2d");
-        return new Chart(ctx, {
-            type: "bar",
+        // Reliability Chart (keep the original implementation)
+        const reliabilityCtx = document.getElementById('reliabilityChart').getContext('2d');
+        const reliabilityChart = new Chart(reliabilityCtx, {
+            type: 'bar',
             data: {
-                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-                datasets: [
-                    {
-                        label: "Monthly Reliability Rate (%)",
-                        data: data.monthlyData.reliability,
-                        backgroundColor: "#4CAF50",
-                    },
-                ],
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Reliability (%)',
+                    data: aircraft.operationalMetrics.safetyTrend.monthlyData.reliability,
+                    backgroundColor: '#0A2342',
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeOutQuart'
+                    }
+                }]
             },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 98,
+                        max: 100
+                    }
+                },
+                animation: {
+                    duration: 0, // Initially disable animation
+                    delay: (context) => {
+                        return context.dataIndex * 200; // Staggered animation for bars
+                    }
+                }
+            }
         });
+
+        // Trigger scroll animations
+        createScrollAnimations();
     }
+
 
 
 
@@ -487,9 +623,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initialize navigation after content is rendered
     setTimeout(initializeNavigation, 100);
 
-    // Initialize charts
-    createSafetyTrendChart(aircraft.operationalMetrics.safetyTrend);
-    createReliabilityChart(aircraft.operationalMetrics.safetyTrend);
+
+    // Call this function after loading the aircraft data
+    initializeCharts(aircraft);
 
 
 });
@@ -628,74 +764,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Add Chart.js CDN to your HTML
-// <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-function initializeCharts(aircraft) {
-    // Safety Trend Chart
-    const safetyCtx = document.getElementById('safetyTrendChart').getContext('2d');
-    new Chart(safetyCtx, {
-        type: 'line',
-        data: {
-            labels: aircraft.operationalMetrics.safetyTrend.yearlyTrend.years,
-            datasets: [{
-                label: 'Safety Score',
-                data: aircraft.operationalMetrics.safetyTrend.yearlyTrend.safetyScores,
-                borderColor: '#6CA6C1',
-                backgroundColor: 'rgba(108, 166, 193, 0.1)',
-                tension: 0.4,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: false,
-                    min: 70,
-                    max: 100
-                }
-            }
-        }
-    });
 
-    // Reliability Chart
-    const reliabilityCtx = document.getElementById('reliabilityChart').getContext('2d');
-    new Chart(reliabilityCtx, {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-            datasets: [{
-                label: 'Reliability (%)',
-                data: aircraft.operationalMetrics.safetyTrend.monthlyData.reliability,
-                backgroundColor: '#0A2342',
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: false,
-                    min: 98,
-                    max: 100
-                }
-            }
-        }
-    });
-}
 
-// Call this function after loading the aircraft data
-initializeCharts(aircraft);
 
