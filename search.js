@@ -102,8 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       overlay.addEventListener('click', () => {
         searchSidebar.classList.remove('active');
+          document.body.style.overflow = '';
     });
-
+          
     closeBtns.addEventListener('click', () => {
         searchSidebar.classList.remove('active');
 
