@@ -15,6 +15,7 @@ class AircraftComparison {
         }
     }
 
+
     // Add this method to handle compare parameter:
     getCompareIdsFromUrl() {
         const params = new URLSearchParams(window.location.search);
@@ -651,6 +652,7 @@ class AircraftComparison {
             if (e.target.matches('.comp-selector-close')) {
                 document.querySelector('.comp-selector-container').classList.remove('active');
             }
+
         });
     }
 
@@ -1771,7 +1773,11 @@ class AircraftComparison {
         }
     }
 
+
 }
+
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const navItems = document.querySelectorAll('.comp-nav-item');
@@ -1780,7 +1786,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let isScrollingProgrammatically = false;
     let scrollTimeout;
 
-      document.querySelector('.comp-add-btn').addEventListener('click', () => {
+    /*document.querySelector('.comp-bookmark').addEventListener('click', () => {
+        document.body.style.overflow = 'hidden';
+    });
+
+    document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('comp-bookmark-popup-close')) {
+            document.body.style.overflow = 'auto';
+        }
+    });
+    */
+
+    document.querySelector('.comp-add-btn').addEventListener('click', () => {
         document.body.style.overflow = 'hidden';
     });
 
@@ -1791,16 +1808,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('click', (event) => {
-        if (event.target.classList.contains('comp-selector-item')) {
+        const compSelectorItem = event.target.closest('.comp-selector-item');
+        if (compSelectorItem) {
             document.body.style.overflow = 'auto';
         }
     });
+
 
     document.addEventListener('click', (event) => {
         if (event.target.classList.contains('comp-selector-close')) {
             document.body.style.overflow = 'auto';
         }
     });
+
+
     // Function to update the sliding indicator
     const updateIndicator = (activeItem) => {
         const itemRect = activeItem.getBoundingClientRect();
@@ -1889,3 +1910,4 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const comparison = new AircraftComparison();
 });
+
